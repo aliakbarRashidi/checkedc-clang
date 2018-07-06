@@ -51,15 +51,15 @@ def runMain(args):
 
   print s
 
-  prog_name = args.prog_name
-  args = []
-  args.append(prog_name)
-  args.extend(DEFAULT_ARGS)
-  args.extend(list(s))
+  new_args = []
+  new_args.append(args.prog_name)
+  new_args.extend(DEFAULT_ARGS)
+  new_args.extend(list(s))
   f = open('convert.sh', 'w')
-  f.write(" \\\n".join(args))
+  f.write(" \\\n".join(new_args))
   f.close()
-  subprocess.check_call(args)
+  if args.convert_immediately:
+    subprocess.check_call(new_args)
 
   return
 
@@ -67,5 +67,6 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser("runner")
   parser.add_argument("compile_commands", type=str)
   parser.add_argument("prog_name", type=str)
+  parser.add_argument("--convert_immediately", action="store_true")
   args = parser.parse_args()
   runMain(args)
